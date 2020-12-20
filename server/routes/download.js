@@ -80,9 +80,6 @@ router.post('/', async (req, res) => {
         const file = await File.create(f);
         await fetch(url, { headers : { 'Accept' : 'application/arraybuffer'}})
         .then(async (response) => {
-            // if(response.status == 200){
-            //     console.log(response);
-            // }
             if(response.status != 200){
                 file.status ='failed';
                 file.reason = response.error ? 'Wrong URL' : response.error;
@@ -94,13 +91,11 @@ router.post('/', async (req, res) => {
         })
         .then(async (data) => {
             file.parts = makeParts(data,partCount);
-            // console.log('inside data');
             file.status ='done';
             file.keys = generateKeys(file.id, partCount)
             await file.save();
         })
         .catch(e => console.log('something is wrong', e.message));
-        // console.log(file);
         sendJson(file,200,res);
         
     } catch (err) {

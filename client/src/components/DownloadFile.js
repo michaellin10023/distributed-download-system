@@ -2,12 +2,10 @@ import React from 'react';
 import { Fragment, useState } from 'react';
 import ChildWorker from './ChildWorker';
 
-
-const unique_keys = ["421f7b70-4292-11eb-898c-cbcdf2f5515b0"]
-
 const DownloadFile = () => {
 
     const [url, setUrl] = useState("");
+    const [isFetched, setIsFetched] = useState(false);
     const [parts, setParts] = useState("");
     const [keys, setKeys] = useState([]);
 
@@ -15,21 +13,27 @@ const DownloadFile = () => {
         e.preventDefault();
         try {
             const body = { url, parts };
+            // console.log("body", body)
             const response = await fetch("http://localhost:3000/download", {
                 method: "POST",
-                headers: {"Content-Type" : "application/arraybuffer"},
+                headers: {"Content-Type" : "application/json"}, // can't use application/arraybuffer!!!
                 body: JSON.stringify(body)
             });
             const jsonData = await response.json();
+            setIsFetched(true);
             setKeys(jsonData);
-            console.log(jsonData);
         } catch (err) {
             console.error('something is wrong', err.message)
         }
     }
-    
-    // const unique_keys = JSON.stringify(keys.keys)
-    console.log(keys.keys)
+
+    const renderChildWorker = () => {
+        if(isFetched){
+            return Object.values(keys.keys).map((key) => <ChildWorker keys={key}/>)
+        } else {
+            return <div> Haven't fetch anything yet</div>
+        }
+    }
 
     return (
         <div>
@@ -46,8 +50,9 @@ const DownloadFile = () => {
                 {JSON.stringify(keys.keys)}
             </Fragment>
 
-            <div>
-                { unique_keys.map((key) => <ChildWorker keys={key}/>) }
+            <div className="text-center mt-5">
+                <h1>Web worker waiting...</h1>
+                { renderChildWorker() }
             </div>
         </div>
         );

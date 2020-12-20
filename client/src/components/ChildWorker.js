@@ -33,7 +33,7 @@ class ChildWorker extends Component {
             size={300}
           />
           <button className="btn-worker" onClick={this.fetchWebWorker}>
-            Fetch Users with Web Worker
+            Fetch data with Web Worker
           </button>
         </section>
       </div>
