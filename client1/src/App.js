@@ -1,6 +1,6 @@
 import './App.css';
 import React, {Fragment} from 'react';
-// import DownloadPart from './components/DownloadPart';
+import DownloadPart from './components/DownloadPart';
 import DownloadFile from './components/DownloadFile';
 
 function App() {
@@ -9,7 +9,6 @@ function App() {
       <div className="container">
         <DownloadFile/>
         {/* <DownloadPart/> */}
-        {/* <ChildWorker/> */}
       </div>
     </Fragment>
   );

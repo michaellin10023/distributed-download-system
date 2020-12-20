@@ -22,7 +22,10 @@ const file = sequelize.define('file', {
         type : Sequelize.INTEGER
     },
     parts : {
-        type : Sequelize.ARRAY(Sequelize.BLOB)
+        type : Sequelize.ARRAY(Sequelize.BLOB('long')),
+        get() {
+            return this.getDataValue('parts').toString('utf8')
+        }
     },
     reason : {
         type : Sequelize.STRING,

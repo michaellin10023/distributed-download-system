@@ -90,6 +90,7 @@ router.post('/', async (req, res) => {
                 return;
             }
             return response.arrayBuffer();
+            // return response.blob();
         })
         .then(async (data) => {
             file.parts = makeParts(data,partCount);
@@ -109,11 +110,11 @@ router.post('/', async (req, res) => {
 });
 
 // route for worker threads to get the partition data
-router.post('/:key', async (req, res) => {
+router.get('/:key', async (req, res) => {
     try {
         const uid = req.params.key.slice(0,36);
         const index = parseInt(req.params.key.slice(uid.length)) + 1;
-        console.log(uid, index);
+        // console.log(uid, index);
         const part = await sequelize.query(`SELECT parts[${index}] from files where id ='${uid}';`);
         console.log(part);
         sendJson(part,200,res);

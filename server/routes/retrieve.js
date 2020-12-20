@@ -10,7 +10,7 @@ const sendJson = (obj, status,res) => {
 
 router.get('/', async (req,res) => {
     try {
-        return sendJson({msg : 'hello'}, 404, res)
+        return sendJson({msg : 'hello'}, 200, res)
     } catch (error) {
         console.log(error)
     }

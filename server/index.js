@@ -19,7 +19,6 @@ app.use('/download', require('./routes/download'));
 app.use('/retrieve ', require('./routes/retrieve'));
 
 
-
-app.listen(5000, () => {
-    console.log("server has started on port 5000....")
+app.listen(3000, () => {
+    console.log("server has started on port 3000....")
 });
