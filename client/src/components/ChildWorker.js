@@ -1,44 +1,42 @@
-import React, { Component } from "react";
-import ReactCountdownClock from "react-countdown-clock";
+import React, { useState } from "react";
 import worker from "../worker.js";
 import WebWorker from "../workerSetup";
 
-class ChildWorker extends Component {
-  constructor(props) {
-    super(props);
-    this.key = this.props.keys;
-  }
+const ChildWorker = (props) => {
 
-  fetchWebWorker = () => {
-    this.worker.postMessage(this.key);
+  const [fetched, setFetched] = useState(false);
+  const [data, setData] = useState(null);
+  
+  const key = props.keys;
+  const myworker = new WebWorker(worker);
 
-    this.worker.addEventListener("message", event => {
-      console.log("main received : " + event.data)
+  const fetchWebWorker = () => {
+    myworker.postMessage(key);
+    myworker.addEventListener("message", event => {
+      setFetched(true);
+      setData(event.data);
     });
   };
 
-  componentDidMount = () => {
-    this.worker = new WebWorker(worker);
-  };
-
-  render() {
-    return (
-      <div className="App-bottom">
-
-        <section className="App-right">
-          <ReactCountdownClock
-            seconds={100}
-            color="#e56"
-            alpha={0.9}
-            size={300}
-          />
-          <button className="btn-worker" onClick={this.fetchWebWorker}>
-            Fetch data with Web Worker
-          </button>
-        </section>
-      </div>
-    );
+  const renderResult = () => {
+    if(fetched){
+        return <input className="mt-5" onClick={props.parentCallback} value={data}/>
+    } else {
+        return <div> Haven't fetch anything yet</div>
+    }
   }
+
+  return (
+    <div className="App-bottom">
+      <section className="App-right">
+        <button className="btn-worker" onClick={fetchWebWorker}>
+          Fetch data with Web Worker
+        </button>
+        <br></br>
+        {renderResult()}
+      </section>
+    </div>
+  )
 }
 
 export default ChildWorker;

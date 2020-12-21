@@ -1,6 +1,8 @@
+import { userInfo } from 'os';
 import React from 'react';
 import { Fragment, useState } from 'react';
 import ChildWorker from './ChildWorker';
+import MergeResult from './MergeResult'
 
 const DownloadFile = () => {
 
@@ -8,6 +10,7 @@ const DownloadFile = () => {
     const [isFetched, setIsFetched] = useState(false);
     const [parts, setParts] = useState("");
     const [keys, setKeys] = useState([]);
+    const [result, setResult] = useState([]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -27,9 +30,16 @@ const DownloadFile = () => {
         }
     }
 
+    const parentCallback = (e) => {
+        setResult(e.target.value);
+    }
+
     const renderChildWorker = () => {
         if(isFetched){
-            return Object.values(keys.keys).map((key) => <ChildWorker keys={key}/>)
+            return Object.values(keys.keys).map((key) => 
+            <div className="text-center mt-5" key={key}>
+                <ChildWorker keys={key} parentCallback={parentCallback}/>
+            </div>)
         } else {
             return <div> Haven't fetch anything yet</div>
         }
@@ -51,9 +61,11 @@ const DownloadFile = () => {
             </Fragment>
 
             <div className="text-center mt-5">
-                <h1>Web worker waiting...</h1>
+                <p1>Web worker waiting...</p1>
                 { renderChildWorker() }
             </div>
+            <MergeResult/>
+            {result}
         </div>
         );
 }

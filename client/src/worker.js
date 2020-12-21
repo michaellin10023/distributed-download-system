@@ -12,14 +12,10 @@ export default () => {
             return res.json();
         })
         .then(data => {
-            // console.log(data[0][0].parts.data);
             postMessage("hello main! fetch is done!");
             postMessage(data[0][0].parts.data)
         })
         .catch(e => console.log('something is wrong', e.message))
-        
-        // const body = await response.json();
-        // console.log(body)
         
     });
   };
